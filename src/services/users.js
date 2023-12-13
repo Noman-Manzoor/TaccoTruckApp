@@ -40,12 +40,5 @@ const updateMyCart = async (userId, myCart) => {
 };
 
 module.exports = {
-  findById,
-  findAll,
-  create,
-  updateById,
-  getUserOrders,
-  addOrder,
-  updateFav,
-  updateMyCart,
+  findById, findAll, create, updateById, getUserOrders, addOrder, updateFav, updateMyCart,
 };
