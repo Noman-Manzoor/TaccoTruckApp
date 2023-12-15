@@ -6,7 +6,7 @@ const upload = multer({
   storage: storage,
 });
 
-var cpUpload = upload.array('files', 10);
+const cpUpload = upload.array('files', 10);
 
 Router.use('/auth', require('./auth'));
 Router.use('/trucks', require('./trucks'));

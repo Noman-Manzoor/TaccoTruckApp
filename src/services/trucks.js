@@ -1,18 +1,26 @@
-const { Truck } = require('../models');
-exports.getAll = async () => {
-  return Truck.find();
+const { Truck, Feedback, Order } = require('../models');
+exports.getAll = async (where = {}) => {
+  return Truck.find(where);
 }
 exports.getReviews = async (id) => {
-  return Truck.findById(id).populate("feedbacks")
+  return Feedback.find({
+    truckId: id
+  }).populate("users")
+}
+exports.getCategory = async (id) => {
+  return Truck.distinct("category")
 }
 exports.getById = async (id) => {
   return Truck.findById(id);
 }
-exports.getTruckMenu = async () => {
+exports.getTruckMenu = async (id) => {
   return Truck.findById(id).populate("menu")
 }
 exports.getTruckOrders = async (id) => {
-  return Truck.findById(id).populate("orders.accepted");
+  return Order.find({
+    truckId: id,
+
+  }).populate("users");
 }
 exports.getTruckOrderRequest = async (id) => {
   return Truck.findById(id).populate("orders.requested");

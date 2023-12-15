@@ -2,23 +2,20 @@ module.exports = {
   success: (data, statusCode = 200) => {
     return (req, res, next) => {
       res.status(statusCode).json({
-        success: true,
-        data,
+        success: true, data,
       });
-      next();
+
     };
   },
 
   error: (error, statusCode = 500) => {
+    console.log(error)
     return (req, res, next) => {
       res.status(statusCode).json({
-        success: false,
-        data: {
-          message: error.message,
-          error,
+        success: false, data: {
+          message: error.message, error,
         },
       });
-      next();
     };
   },
 };

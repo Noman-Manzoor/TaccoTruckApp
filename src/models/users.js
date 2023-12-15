@@ -2,66 +2,46 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { hashPassword } = require('../utils/password');
 
-const Users = new mongoose.Schema(
-  {
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      validate: {
-        validator: (value) => {
-          return /\S+@\S+\.\S+/.test(value);
-        },
-        message: 'Invalid email address',
-      },
+const Users = new mongoose.Schema({
+  email: {
+    type: String, unique: true, validate: {
+      validator: (value) => {
+        return /\S+@\S+\.\S+/.test(value);
+      }, message: 'Invalid email address',
     },
-    password: {
-      type: String,
-      required: true,
-    },
-    firstName: {
-      type: String,
-      required: true,
-    },
-    lastName: {
-      type: String,
-      required: true,
-    },
-    userName: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    contactNo: {
-      type: String,
-    },
-    address: {
-      type: String,
-    },
-    medium: {
-      type: String,
-    },
-    orders: {
-      type: Array,
-    },
-    fav: {
-      type: Object,
-    },
-    myCart: {
-      type: Array,
-    },
-    extraPayload: {
-      type: Object,
-    },
+  }, password: {
+    type: String,
+  }, avatar: {
+    type: String,
+  }, firstName: {
+    type: String,
+  }, lastName: {
+    type: String,
+  }, contactNo: {
+    type: String,
+  }, address: {
+    type: String,
+  }, currentLoc: {
+    type: Object,
+  }, medium: {
+    type: String, enum: ["email", "google", "facebook"], default: "email"
+  }, orders: {
+    type: [{
+      type: mongoose.Schema.Types.ObjectId, ref: "orders"
+    }],
+  }, fav: {
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'trucks' }]
+  }, myCart: {
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
+  }, extraPayload: {
+    type: Object,
   },
-  {
-    timestamps: true,
-  }
-);
+}, {
+  timestamps: true,
+});
 
 Users.pre('save', async function (next) {
   const user = this;
-
   if (user.isModified('password') || user.isNew) {
     try {
       const hash = await hashPassword(user.password);
@@ -75,6 +55,6 @@ Users.pre('save', async function (next) {
   return next();
 });
 
-Users.index({ email: 1, userName: 1 });
+Users.index({ email: 1, });
 
-module.exports = mongoose.model('Users', Users);
+module.exports = mongoose.model('users', Users);

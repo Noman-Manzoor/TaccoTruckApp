@@ -3,8 +3,8 @@ const { success, error } = require('../utils/apiResponse');
 
 const findAll = async (req, res, next) => {
   try {
-    const users = await users.findAll();
-    success(users)(req, res, next);
+    const response = await users.findAll();
+    success(response)(req, res, next);
   }
   catch (e) {
     error(new Error(e.message))(req, res, next);
@@ -12,7 +12,7 @@ const findAll = async (req, res, next) => {
 };
 
 const findById = async (req, res, next) => {
-  const id = req.user._id;
+  const id = req.user.id;
   try {
     const user = await users.findById(id);
     success(user)(req, res, next);
@@ -23,10 +23,10 @@ const findById = async (req, res, next) => {
 };
 
 const getUserOrders = async (req, res, next) => {
-  const userId = req.user._id;
+  const userId = req.user.id;
   try {
     const orders = await users.getUserOrders(userId);
-    success(orders)(req, res, next);
+    success(orders || [])(req, res, next);
   }
   catch (e) {
     error(new Error(e.message))(req, res, next);
@@ -35,7 +35,7 @@ const getUserOrders = async (req, res, next) => {
 
 const addOrder = async (req, res, next) => {
   try {
-    const orders = await users.addOrder(req.user._id, req.body);
+    const orders = await users.addOrder(req.user.id, req.body);
     success({ message: "Successfully added the order in cart" })(req, res, next);
   }
   catch (e) {
@@ -45,8 +45,27 @@ const addOrder = async (req, res, next) => {
 
 const updateMyCart = async (req, res, next) => {
   try {
-    const orders = await users.updateMyCart(req.user._id, req.body);
+    const orders = await users.updateMyCart(req.user.id, req.body);
     success({ message: "Successfully submit order" })(req, res, next);
+  }
+  catch (e) {
+    error(new Error(e.message))(req, res, next);
+  }
+};
+const addTruckFav = async (req, res, next) => {
+  try {
+    const orders = await users.addTruckFav(req.user.id, req.body);
+    success({ message: "Successfully Added" })(req, res, next);
+  }
+  catch (e) {
+    error(new Error(e.message))(req, res, next);
+  }
+};
+
+const removeTruckFav = async (req, res, next) => {
+  try {
+    const orders = await users.removeTruckFav(req.user.id, req.body);
+    success({ message: "Successfully remove" })(req, res, next);
   }
   catch (e) {
     error(new Error(e.message))(req, res, next);
@@ -54,7 +73,7 @@ const updateMyCart = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-  const userId = req.user._id;
+  const userId = req.user.id;
   const updates = req.body;
   try {
     const updatedUser = await users.updateById(userId, updates);
@@ -66,5 +85,5 @@ const update = async (req, res, next) => {
 };
 
 module.exports = {
-  findAll, findById, getUserOrders, addOrder, updateMyCart, update,
+  findAll, findById, getUserOrders, addOrder, updateMyCart, update, addTruckFav, removeTruckFav
 };

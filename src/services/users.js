@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Order } = require('../models');
 
 const findAll = async () => {
   return User.find();
@@ -17,17 +17,22 @@ const updateById = async (id, user) => {
 };
 
 const getUserOrders = async (userId) => {
-  const user = await User.findById(userId);
+  const user = await Order.find({
+    userId
+  }).populate("trucks");
   return user.orders;
 };
 
 const addOrder = async (userId, order) => {
-  const user = await User.findById(userId);
-  user.orders.push(order);
-  await user.save();
+  return Order.create({ userId, order });
 };
 
-const updateFav = async (userId, fav) => {
+const addTruckFav = async (userId, fav) => {
+  const user = await User.findById(userId);
+  user.fav = fav;
+  await user.save();
+};
+const removeTruckFav = async (userId, fav) => {
   const user = await User.findById(userId);
   user.fav = fav;
   await user.save();
@@ -40,5 +45,5 @@ const updateMyCart = async (userId, myCart) => {
 };
 
 module.exports = {
-  findById, findAll, create, updateById, getUserOrders, addOrder, updateFav, updateMyCart,
+  findById, findAll, create, updateById, getUserOrders, addOrder, addTruckFav, removeTruckFav, updateMyCart,
 };

@@ -3,7 +3,7 @@ const { mongoDB } = require('../../config');
 
 mongoose
   .connect(
-    `mongodb://${mongoDB.hostname}:${mongoDB.port}/${mongoDB.database}`,
+    `mongodb://${ mongoDB.hostname }:${ mongoDB.port }/${ mongoDB.database }`,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -23,8 +23,12 @@ db.once('open', () => {
 
 const User = require('./users');
 const Truck = require('./trucks');
+const Order = require('./orders');
+const Feedback = require('./userFeedbacks');
 
 module.exports = {
   User,
   Truck,
+  Order,
+  Feedback
 };
