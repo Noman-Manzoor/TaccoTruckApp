@@ -28,6 +28,7 @@ const loginSocial = async (req, res, next) => {
     }
     const socialUser = await auth.loginSocial({ provider, token, ...req.body });
     const existingUser = await User.findOne({ email: socialUser.email });
+    console.log(req.body)
     if (existingUser) {
       const response = await auth.login({
         email: existingUser.email, password: req.body["uid"],
@@ -37,11 +38,11 @@ const loginSocial = async (req, res, next) => {
     }
 
     const newUser = await User.create({
-      email: socialUser.email, socialLogins: {
+      email: socialUser.email, password: req.body["uid"], socialLogins: {
         [provider]: token,
       },
     });
-    const response = await auth.login({ email: newUser.email, password: res.body.uid });
+    const response = await auth.login({ email: newUser.email, password: req.body["uid"] });
     return apiResponse.success(response)(req, res, next);
   }
   catch (err) {

@@ -9,7 +9,9 @@ const UserOrders = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId, ref: 'trucks'
     },
     status: {
-      type: String,
+      // pending(0), checkout(1), accept(2), reject(-1), processing(3), done(4)
+      type: Number,
+      required: true,
     },
     price: {
       type: Number,

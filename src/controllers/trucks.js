@@ -101,7 +101,10 @@ exports.getTruckOrderRequest = async (req, res, next) => {
 exports.updateTruckOrderRequest = async (req, res, next) => {
   try {
     const { orderId } = req.params
-    const response = await trucks.updateTruckOrderRequest(req.user["_id"], orderId, req.body);
+    if (!req.body.hasOwnProperty("status")) {
+      return error(new Error("Status is required"), 400)(req, res, next)
+    }
+    const response = await trucks.updateTruckOrderRequest(req.user["id"], orderId, req.body);
     success(response)(req, res, next)
   }
   catch (e) {
@@ -122,6 +125,15 @@ exports.updateTruckMenu = async (req, res, next) => {
   try {
     const { id } = req.params
     const response = await trucks.updateTruckMenu();
+    success(response)(req, res, next)
+  }
+  catch (e) {
+    error(new Error(e["message"] || "Internal server error"), 500)(req, res, next)
+  }
+}
+exports.updateTruck = async (req, res, next) => {
+  try {
+    const response = await trucks.updateTruck(req.params.id || req.user.id);
     success(response)(req, res, next)
   }
   catch (e) {

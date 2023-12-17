@@ -35,6 +35,7 @@ const loginSocial = async ({ email, token, provider, ...rest }) => {
   const user = await User.findOne({ email });
   const trucks = await Truck.findOne({ "driver.email": email })
   if (!user && !trucks) {
+    console.log("///////////////")
     return await User.create({
       email, medium: provider, password: rest.uid, extraPayload: {
         token, uid: rest.uid

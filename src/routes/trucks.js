@@ -13,6 +13,8 @@ Router.get('/:id', validateToken, trucks.getById);
 Router.post('/orders/request/:orderId', validateToken, trucks.updateTruckOrderRequest);
 Router.post('/menu', validateToken, trucks.addTruckMenu);
 Router.put('/menu/:menuId', validateToken, trucks.updateTruckMenu);
+Router.put('/me', validateToken, trucks.updateTruckMenu);
+Router.put('/:id', validateToken, trucks.updateTruckMenu);
 Router.delete('/menu/:menuId', validateToken, trucks.deleteTruckMenu);
 
 module.exports = Router;

@@ -23,17 +23,24 @@ exports.getTruckOrders = async (id) => {
   }).populate("users");
 }
 exports.getTruckOrderRequest = async (id) => {
-  return Truck.findById(id).populate("orders.requested");
+  return Order.find({
+    status: 1, truckId: id
+  });
 }
+
 exports.updateTruckOrderRequest = async (id, orderId, data) => {
-  return Truck.updateOne({ _id: id, "orders.requested._id": orderId }, {
-    $set: {
-      "orders.requested.$[i]": {
-        ...data,
-      }
-    }, arrayFilters: [{ "orders.requested._id": orderId }],
+  return Order.updateOne({ _id: orderId, truckId: id }, {
+    status: data.status,
   })
 }
+
+exports.updateTruck = async (id, data) => {
+  return Truck.updateOne({ _id: id }, {
+    ...data
+  })
+}
+
+
 exports.addTruckMenu = async (id, data) => {
   return Truck.updateOne({
     _id: id
@@ -53,6 +60,7 @@ exports.updateTruckMenu = async (id, menuId, data) => {
     }, arrayFilters: [{ "menu._id": menuId }],
   })
 }
+
 exports.deleteTruckMenu = async (id, menuId) => {
   return Truck.updateOne({ _id: id }, {
     $pull: {
