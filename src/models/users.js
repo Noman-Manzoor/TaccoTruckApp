@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
-const { hashPassword } = require('../utils/password');
+const {Schema} = mongoose;
+const {hashPassword} = require('../utils/password');
 
 const Users = new mongoose.Schema({
   email: {
@@ -25,15 +25,15 @@ const Users = new mongoose.Schema({
     type: Object,
   }, medium: {
     type: String, enum: ["email", "google", "facebook"], default: "email"
-  }, orders: {
+  },
+  orders: {
     type: [{
       type: mongoose.Schema.Types.ObjectId, ref: "orders"
     }],
   }, fav: {
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'trucks' }]
-  }, myCart: {
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "orders" }],
-  }, extraPayload: {
+    type: [{type: mongoose.Schema.Types.ObjectId, ref: 'trucks'}]
+  }, myCart:  {type: mongoose.Schema.Types.ObjectId, ref: "orders"},
+  extraPayload: {
     type: Object,
   },
 }, {
@@ -46,15 +46,14 @@ Users.pre('save', async function (next) {
     try {
       const hash = await hashPassword(user.password);
       user.password = hash;
-    }
-    catch (err) {
+    } catch (err) {
       return next(err);
     }
   }
-
+  
   return next();
 });
 
-Users.index({ email: 1, });
+Users.index({email: 1,});
 
 module.exports = mongoose.model('users', Users);

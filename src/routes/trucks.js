@@ -1,5 +1,5 @@
-const { trucks } = require('../controllers');
-const { validateToken } = require('../middleware/validate');
+const {trucks} = require('../controllers');
+const {validateToken} = require('../middleware/validate');
 const Router = require('express').Router();
 
 Router.get('/', validateToken, trucks.getAll);
@@ -13,7 +13,7 @@ Router.get('/:id', validateToken, trucks.getById);
 Router.post('/orders/request/:orderId', validateToken, trucks.updateTruckOrderRequest);
 Router.post('/menu', validateToken, trucks.addTruckMenu);
 Router.put('/menu/:menuId', validateToken, trucks.updateTruckMenu);
-Router.put('/me', validateToken, trucks.updateTruckMenu);
+Router.put('/me', validateToken, trucks.updateTruck);
 Router.put('/:id', validateToken, trucks.updateTruckMenu);
 Router.delete('/menu/:menuId', validateToken, trucks.deleteTruckMenu);
 

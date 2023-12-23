@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const { User, Truck } = require('../models');
-const { error } = require('../utils/apiResponse');
+const {User, Truck} = require('../models');
+const {error} = require('../utils/apiResponse');
 const secret = 'mysecretkey';
 const generateToken = async (user) => {
   console.log(user)
@@ -23,7 +23,7 @@ const validateToken = async (req, res, next) => {
         401
       )(req, res, next);
     }
-
+    console.log(token);
     const tokens = token.split(' ');
     const user = decodeToken(tokens[tokens.length - 1]);
     console.log(user)
@@ -33,13 +33,12 @@ const validateToken = async (req, res, next) => {
         isExist = await User.findOne({
           _id: user.id,
         });
-      }
-      else {
+      } else {
         isExist = await Truck.findOne({
           _id: user.id,
         });
       }
-
+      
       if (!isExist) {
         return error(
           new Error('Access denied. user not valid'),
@@ -50,8 +49,7 @@ const validateToken = async (req, res, next) => {
       req[user.userType] = isExist
       next();
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.error(error);
     return error(new Error('Invalid token provided.'), 401)(req, res, next);
   }
@@ -62,9 +60,9 @@ const decodeToken = (token) => {
     if (!token) {
       return;
     }
+    console.log(token)
     return jwt.verify(token, secret);
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e);
     return '';
   }

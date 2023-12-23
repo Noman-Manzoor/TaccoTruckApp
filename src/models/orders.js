@@ -19,6 +19,9 @@ const UserOrders = new mongoose.Schema(
     deliveryFee: {
       type: Number,
     },
+    deliveryAddress: {
+      type: String,
+    },
     serviceType: {
       type: String,
       required: true,

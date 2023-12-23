@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const { hashPassword } = require('../utils/password');
-const { Schema } = mongoose;
+const {hashPassword} = require('../utils/password');
+const {Schema} = mongoose;
 
 const Trucks = new mongoose.Schema(
   {
@@ -57,7 +57,8 @@ const Trucks = new mongoose.Schema(
       type: String,
     },
     rating: {
-      type: String,
+      type: Number,
+      default: 0.0
     },
     description: {
       type: String,
@@ -70,6 +71,7 @@ const Trucks = new mongoose.Schema(
         _id: {
           type: Schema.Types.ObjectId,
           default: mongoose.Types.ObjectId,
+          auto: true
         },
         img: {
           type: String,
@@ -119,15 +121,14 @@ Trucks.pre('save', async function (next) {
     try {
       const hash = await hashPassword(truck.driver.password);
       truck.driver.password = hash;
-    }
-    catch (err) {
+    } catch (err) {
       return next(err);
     }
   }
-
+  
   return next();
 });
 
-Trucks.index({ "driver.email": 1, });
+Trucks.index({"driver.email": 1,});
 
 module.exports = mongoose.model('trucks', Trucks);
